@@ -1,5 +1,4 @@
-import { addDoc, collection, getDocs } from "@firebase/firestore";
-import { async } from "@firebase/util";
+import { addDoc, collection, getDocs, setDoc, doc} from "@firebase/firestore";
 import { db } from "../config/Firebase";
 
 const PATH = "thingstodo"
@@ -22,4 +21,10 @@ export const postThingToDo = async (thingToDo) => {
   const { id } = await addDoc(thingsToDoCollection, thingToDo);
 
   return {...thingToDo, id}
+}
+
+export const updateThingToDo = async (thingToDo) => {
+  const id = thingToDo.id
+  delete thingToDo.id
+  await setDoc(doc(db, PATH, id), thingToDo);
 }

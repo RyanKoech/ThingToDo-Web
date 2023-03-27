@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getAllThingsToDo, postThingToDo } from "./api/ThingToDo";
+import { getAllThingsToDo, postThingToDo, updateThingToDo } from "./api/ThingToDo";
 import ThingToDo from "./components/ThingToDo";
 
 function App() {
@@ -35,6 +35,7 @@ function App() {
       thingsToDo.map((thingToDo) => {
         if(thingToDo.id === thingToDoId) {
           thingToDo.done = !thingToDo.done
+          updateThingToDo({...thingToDo}).then((res)=>{});
         }
         return thingToDo
       })
