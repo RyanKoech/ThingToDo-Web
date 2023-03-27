@@ -1,35 +1,20 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { getAllThingsToDo, postThingToDo } from "./api/ThingToDo";
 import ThingToDo from "./components/ThingToDo";
-
-const THINGS_TO_DO = [
-  {
-    id : "123456",
-    name: "Thing One",
-    done : false,
-  },
-  {
-    id : "1233456",
-    name: "Thing Two",
-    done : true,
-  },
-  {
-    id : "145456",
-    name: "Thing Three",
-    done : true,
-  },
-  {
-    id : "156456",
-    name: "Thing Four",
-    done : false,
-  },
-];
 
 function App() {
 
   const taskInputRef = useRef();
-  const [thingsToDo, setThingsToDo] = useState(THINGS_TO_DO);
+  const [thingsToDo, setThingsToDo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
+  useEffect(()=> {
+    getAllThingsToDo().then(res => {
+      setThingsToDo(res);
+      setIsLoading(false);
+    })
+  }, []);
+
   const addThingToDo = (thingToDo) => {
     setThingsToDo([
       ...thingsToDo,
@@ -58,14 +43,15 @@ function App() {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    
-    addThingToDo(
-      {
-        id : Math.random().toString(),
-        name : taskInputRef.current.value,
-        done : false,
-      }
-    );
+
+    setIsLoading(true);
+    postThingToDo({
+      name : taskInputRef.current.value,
+      done : false,
+    }).then(res => {
+      addThingToDo(res);
+      setIsLoading(false);
+    });
   }
 
   return (
