@@ -1,5 +1,4 @@
 import { addDoc, collection, getDocs, setDoc, doc, deleteDoc} from "@firebase/firestore";
-import { async } from "@firebase/util";
 import { db } from "../config/Firebase";
 
 const PATH = "thingstodo"
