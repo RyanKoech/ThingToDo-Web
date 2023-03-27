@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getAllThingsToDo, postThingToDo, updateThingToDo } from "./api/ThingToDo";
+import { deleteThingToDo, getAllThingsToDo, postThingToDo, updateThingToDo } from "./api/ThingToDo";
 import ThingToDo from "./components/ThingToDo";
 
 function App() {
@@ -25,7 +25,11 @@ function App() {
   const removeThingToDo = (thingToDo) => {
     setThingsToDo(
       thingsToDo.filter((element) => {
-        return element.id !== thingToDo.id
+        const targetItem = element.id === thingToDo.id
+        if (targetItem) {
+          deleteThingToDo(element).then(res => {});
+        }
+        return !targetItem
       })
     )
   }
