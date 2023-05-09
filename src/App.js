@@ -8,11 +8,16 @@ function App() {
   const taskInputRef = useRef();
   const [thingsToDo, setThingsToDo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(()=> {
     getAllThingsToDo().then(res => {
       setThingsToDo(res);
+      setIsError(false);
       setIsLoading(false);
+    }).catch(err => {
+      setIsLoading(false)
+      setIsError(true)
     })
   }, []);
 
@@ -51,12 +56,16 @@ function App() {
     e.preventDefault();
 
     setIsLoading(true);
+    setIsError(false);
     postThingToDo({
       name : taskInputRef.current.value,
       done : false,
     }).then(res => {
       addThingToDo(res);
       setIsLoading(false);
+    }).catch(err => {
+      setIsLoading(false);
+      setIsError(true);
     });
   }
   return (
@@ -81,6 +90,11 @@ function App() {
                 </div>
               </div>
             : <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Submit</button>
+          }
+          {
+            isError && <div className="flex items-center justify-center">
+              <div className="mt-10 text-xl3 font-bold text-center">Something went terribly wrong. Try again later.</div>
+            </div>
           }
       
         </form>
